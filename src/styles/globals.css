@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/* Fonts */
+:root {
+  --font-sans: "Roboto", sans-serif;
+  --font-heading: "Rajdhani", sans-serif;
+
+  /* Colors */
+  --color-black: #1F2937;
+  --color-dark-gray: #334155;
+  --color-yellow: #F59E0B;
+  --color-white: #FFFFFF;
+
+  /* Radii */
+  --radius-md: 0.5rem;
+
+  /* Shadows */
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.15);
+}
+
+/* Base */
+body {
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  color: var(--color-black);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Buttons */
+.btn {
+  @apply px-6 py-3 rounded-md font-medium shadow-md transition-transform duration-300;
+}
+.btn:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Cards */
+.card {
+  @apply p-6 rounded-lg shadow-lg bg-white;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
