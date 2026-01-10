@@ -5,9 +5,10 @@ import Image from "next/image";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -20,35 +21,43 @@ export default function Header() {
   ];
 
   return (
-    <header
-      className={`fixed w-full z-50 transition-all duration-500 ${
-        scrolled
-          ? "backdrop-blur-md bg-white/80 shadow-md py-2"
-          : "bg-transparent py-6"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        <Link href="#hero" className="transition-all duration-500">
+    <header className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/80 backdrop-blur-md py-2 shadow" : "py-6"}`}>
+      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+
+        <Link href="#hero">
           <Image
             src="/images/JAMS-04.svg"
-            alt="JAMS Studio Logo"
-            width={scrolled ? 120 : 150} // shrink logo when scrolled
-            height={scrolled ? 40 : 50} // adjust height proportionally
+            alt="JAMS Studio"
+            width={scrolled ? 110 : 150}
+            height={scrolled ? 38 : 50}
             className="transition-all duration-500"
           />
         </Link>
-        <nav className="flex gap-8 font-sans font-medium">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="relative text-black hover:text-[var(--color-yellow)] transition-colors"
-            >
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[var(--color-yellow)] transition-all group-hover:w-full"></span>
+
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex gap-8 font-medium">
+          {navItems.map(item => (
+            <Link key={item.href} href={item.href} className="hover:text-yellow-500 transition">
               {item.name}
             </Link>
           ))}
         </nav>
+
+        {/* Mobile Button */}
+        <button onClick={() => setOpen(!open)} className="md:hidden text-3xl">
+          ☰
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`md:hidden overflow-hidden transition-all duration-500 ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+        <div className="bg-white/95 backdrop-blur-md flex flex-col items-center gap-6 py-8">
+          {navItems.map(item => (
+            <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="text-lg">
+              {item.name}
+            </Link>
+          ))}
+        </div>
       </div>
     </header>
   );
