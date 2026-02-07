@@ -1,39 +1,46 @@
 "use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
-  return (
-    <footer className="w-full bg-[#1F2937] text-white py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+  const [year, setYear] = useState<number | null>(null);
 
-        {/* Logo & Tagline */}
-        <div className="flex flex-col items-center md:items-start">
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
+  return (
+    <footer className="relative z-[1] border-t border-white/[0.06] py-8 px-4 sm:px-6">
+      <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="flex items-center gap-3">
           <Image
             src="/images/JAMS-04-weiss.svg"
-            alt="JAMS Studio Logo"
-            width={140}
-            height={40}
-            className="mb-2"
+            alt="JAMS Studio"
+            width={100}
+            height={30}
           />
-          <p className="text-gray-300 text-center md:text-left text-sm">
-            Crafting sleek apps & websites for modern businesses.
-          </p>
+          <div className="w-px h-5 bg-white/[0.06]" />
+          <span className="text-sm text-[var(--color-text-muted)]">
+            © {year ?? "2025"} JAMS Studio GmbH
+          </span>
         </div>
 
-        {/* Address & Email */}
-        <div className="flex flex-col items-center md:items-end text-gray-300 text-sm text-center md:text-right">
-          <p>JAMS Studio GmbH</p>
-          <p>Paderborn, Germany</p>
-          <Link href="mailto:info@jams-studio.de" className="hover:text-yellow-400 transition-colors mt-1">
-            info@jams-studio.de
-          </Link>
+        <div className="flex gap-6">
+          {[
+            { name: "Services", href: "#services" },
+            { name: "Process", href: "#process" },
+            { name: "Contact", href: "#contact" },
+          ].map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-amber)] transition-colors"
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
-      </div>
-
-      {/* Bottom copyright */}
-      <div className="mt-6 text-center text-gray-400 text-xs">
-        &copy; {new Date().getFullYear()} JAMS Studio GmbH. All rights reserved.
       </div>
     </footer>
   );

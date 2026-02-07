@@ -6,59 +6,111 @@ import Image from "next/image";
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
+    setMounted(true);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navItems = [
-    { name: "Home", href: "#hero" },
-    { name: "Services", href: "#features" },
-    { name: "Portfolio", href: "#portfolio" },
-    { name: "Contact", href: "#contact" },
+    { name: "Services", href: "#services" },
+    { name: "Process", href: "#process" },
+    { name: "Stack", href: "#tech" },
   ];
 
+  const isScrolled = mounted && scrolled;
+
   return (
-    <header className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/80 backdrop-blur-md py-2 shadow" : "py-6"}`}>
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+    <>
+      <header
+        className={`fixed w-full z-50 transition-all duration-500 ${
+          isScrolled
+            ? "nav-scrolled py-3"
+            : "py-5"
+        }`}
+      >
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex justify-between items-center">
+          <Link href="#hero" className="flex items-center gap-3">
+            <Image
+              src="/images/JAMS-04-weiss.svg"
+              alt="JAMS Studio"
+              width={120}
+              height={40}
+              className="transition-all duration-500"
+              style={{
+                width: isScrolled ? 100 : 120,
+                height: isScrolled ? 34 : 40,
+              }}
+            />
+          </Link>
 
-        <Link href="#hero">
-          <Image
-            src="/images/JAMS-04.svg"
-            alt="JAMS Studio"
-            width={scrolled ? 110 : 150}
-            height={scrolled ? 38 : 50}
-            className="transition-all duration-500"
-          />
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-8 font-medium">
-          {navItems.map(item => (
-            <Link key={item.href} href={item.href} className="hover:text-yellow-500 transition">
-              {item.name}
+          {/* Desktop */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="nav-link"
+              >
+                {item.name}
+              </Link>
+            ))}
+            <Link href="#contact" className="nav-cta">
+              Let&apos;s Talk →
             </Link>
-          ))}
-        </nav>
+          </nav>
 
-        {/* Mobile Button */}
-        <button onClick={() => setOpen(!open)} className="md:hidden text-3xl">
-          ☰
-        </button>
-      </div>
+          {/* Mobile toggle */}
+          <button
+            onClick={() => setOpen(true)}
+            className="md:hidden text-2xl"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            ☰
+          </button>
+        </div>
+      </header>
 
-      {/* Mobile Menu */}
-      <div className={`md:hidden overflow-hidden transition-all duration-500 ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="bg-white/95 backdrop-blur-md flex flex-col items-center gap-6 py-8">
-          {navItems.map(item => (
-            <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="text-lg">
+      {/* Mobile fullscreen menu — only rendered after mount to avoid hydration issues */}
+      {mounted && (
+        <div
+          className={`fixed inset-0 z-[99] flex flex-col items-center justify-center gap-8 transition-opacity duration-300 ${
+            open
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
+          }`}
+          style={{
+            background: "rgba(7, 7, 13, 0.97)",
+            backdropFilter: "blur(30px)",
+          }}
+        >
+          <button
+            onClick={() => setOpen(false)}
+            className="absolute top-6 right-6 text-3xl"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            ✕
+          </button>
+          {[...navItems, { name: "Contact", href: "#contact" }].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className="text-3xl font-bold"
+              style={{
+                fontFamily: "var(--font-heading)",
+                color: "var(--color-text-primary)",
+              }}
+            >
               {item.name}
             </Link>
           ))}
         </div>
-      </div>
-    </header>
+      )}
+    </>
   );
 }

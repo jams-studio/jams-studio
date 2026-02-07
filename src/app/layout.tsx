@@ -1,23 +1,29 @@
 import type { Metadata } from "next";
-import { Roboto, Rajdhani } from "next/font/google";
+import { DM_Sans, Syne, JetBrains_Mono } from "next/font/google";
 import "../styles/globals.css";
 
-// Roboto for body text
-const roboto = Roboto({
+const dmSans = DM_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "700"], 
+  weight: ["400", "500", "700"],
 });
 
-// Rajdhani for headings
-const rajdhani = Rajdhani({
+const syne = Syne({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["400", "500", "700"], 
+  weight: ["400", "600", "700", "800"],
 });
+
+const jetbrains = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
 export const metadata: Metadata = {
-  title: "JAMS Studio GmbH",
-  description: "We build apps & websites.",
+  title: "JAMS Studio GmbH — Apps & Websites",
+  description:
+    "JAMS Studio is a dev studio based in Paderborn, Germany. We design and build modern websites, web apps, and cross-platform mobile apps.",
 };
 
 export default function RootLayout({
@@ -28,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`$${roboto.variable} ${rajdhani.variable} antialiased`}
+        className={`${dmSans.variable} ${syne.variable} ${jetbrains.variable} antialiased`}
       >
         {children}
       </body>
