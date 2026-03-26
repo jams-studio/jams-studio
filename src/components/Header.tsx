@@ -40,10 +40,11 @@ export default function Header() {
               alt="JAMS Studio"
               width={120}
               height={40}
+              priority
               className="transition-all duration-500"
               style={{
                 width: isScrolled ? 100 : 120,
-                height: isScrolled ? 34 : 40,
+                height: "auto",
               }}
             />
           </Link>

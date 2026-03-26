@@ -58,9 +58,9 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative z-[1] min-h-screen flex items-center px-4 sm:px-6 py-32 pt-40 overflow-hidden"
+      className="relative z-[1] min-h-screen flex items-center px-4 sm:px-6 py-24 pt-32 md:pt-40 overflow-hidden"
     >
-      <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 items-center">
         {/* Text */}
         <div className="text-center md:text-left">
           <motion.div
@@ -115,12 +115,12 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Code Window */}
+        {/* Code Window — hidden on small screens */}
         <motion.div
           initial={{ opacity: 0, y: 30, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="relative flex items-center justify-center"
+          className="relative hidden md:flex items-center justify-center"
         >
           <div className="hero-orb hero-orb-1" />
           <div className="hero-orb hero-orb-2" />

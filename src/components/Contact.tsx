@@ -1,8 +1,43 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useState, useRef } from "react";
+
+type FormState = "idle" | "loading" | "success" | "error";
 
 export default function Contact() {
+  const [state, setState] = useState<FormState>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setState("loading");
+    setErrorMsg("");
+
+    const data = Object.fromEntries(new FormData(e.currentTarget));
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        setState("success");
+        formRef.current?.reset();
+      } else {
+        const json = await res.json().catch(() => ({}));
+        setErrorMsg(json.error ?? "Something went wrong. Please try again.");
+        setState("error");
+      }
+    } catch {
+      setErrorMsg("Network error. Please check your connection and try again.");
+      setState("error");
+    }
+  }
+
   return (
     <section
       id="contact"
@@ -113,65 +148,119 @@ export default function Contact() {
         </motion.div>
 
         {/* Form */}
-        <motion.form
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15 }}
           className="contact-form-card"
-          action="https://formspree.io/f/YOUR_FORM_ID"
-          method="POST"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
-            <div>
-              <label className="form-label">NAME</label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Your name"
-                required
-                className="form-input"
-              />
-            </div>
-            <div>
-              <label className="form-label">EMAIL</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="you@company.com"
-                required
-                className="form-input"
-              />
-            </div>
-          </div>
+          <AnimatePresence mode="wait">
+            {state === "success" ? (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center justify-center text-center py-12 gap-4"
+              >
+                <div className="w-16 h-16 rounded-full bg-amber-glow border border-[rgba(245,166,35,0.3)] flex items-center justify-center text-3xl">
+                  ✓
+                </div>
+                <h4
+                  className="text-xl font-bold"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  Message sent!
+                </h4>
+                <p className="text-text-secondary text-sm max-w-xs">
+                  Thanks for reaching out. We&apos;ll get back to you within 24
+                  hours.
+                </p>
+                <button
+                  onClick={() => setState("idle")}
+                  className="text-sm text-amber hover:underline mt-2"
+                >
+                  Send another message
+                </button>
+              </motion.div>
+            ) : (
+              <motion.form
+                key="form"
+                ref={formRef}
+                onSubmit={handleSubmit}
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                  <div>
+                    <label className="form-label">NAME</label>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Your name"
+                      required
+                      disabled={state === "loading"}
+                      className="form-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">EMAIL</label>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="you@company.com"
+                      required
+                      disabled={state === "loading"}
+                      className="form-input"
+                    />
+                  </div>
+                </div>
 
-          <div className="mb-5">
-            <label className="form-label">PROJECT TYPE</label>
-            <select name="project_type" className="form-select" defaultValue="">
-              <option value="" disabled>
-                Select a service
-              </option>
-              <option>Website / Landing Page</option>
-              <option>Mobile App</option>
-              <option>Web Application</option>
-              <option>Other</option>
-            </select>
-          </div>
+                <div className="mb-5">
+                  <label className="form-label">PROJECT TYPE</label>
+                  <select
+                    name="project_type"
+                    className="form-select"
+                    defaultValue=""
+                    disabled={state === "loading"}
+                  >
+                    <option value="" disabled>
+                      Select a service
+                    </option>
+                    <option>Website / Landing Page</option>
+                    <option>Mobile App</option>
+                    <option>Web Application</option>
+                    <option>Other</option>
+                  </select>
+                </div>
 
-          <div className="mb-5">
-            <label className="form-label">MESSAGE</label>
-            <textarea
-              name="message"
-              placeholder="Tell us about your project..."
-              required
-              className="form-textarea"
-            />
-          </div>
+                <div className="mb-5">
+                  <label className="form-label">MESSAGE</label>
+                  <textarea
+                    name="message"
+                    placeholder="Tell us about your project..."
+                    required
+                    disabled={state === "loading"}
+                    className="form-textarea"
+                  />
+                </div>
 
-          <button type="submit" className="btn-submit">
-            Send Message →
-          </button>
-        </motion.form>
+                {state === "error" && (
+                  <p className="text-red-400 text-sm mb-4 px-1">{errorMsg}</p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={state === "loading"}
+                  className="btn-submit"
+                >
+                  {state === "loading" ? "Sending…" : "Send Message →"}
+                </button>
+              </motion.form>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

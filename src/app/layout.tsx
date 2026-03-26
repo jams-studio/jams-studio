@@ -21,7 +21,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JAMS Studio GmbH — Apps & Websites",
+  title: "JAMS Studio — Apps & Websites",
   description:
     "JAMS Studio is a dev studio based in Paderborn, Germany. We design and build modern websites, web apps, and cross-platform mobile apps.",
 };

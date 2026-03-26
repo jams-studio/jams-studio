@@ -45,7 +45,7 @@ export default function Process() {
         </motion.p>
       </div>
 
-      <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 relative">
+      <div className="max-w-[1200px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 relative">
         {/* Connecting line (desktop) */}
         <div className="process-line hidden md:block" />
 

@@ -11,35 +11,65 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="relative z-[1] border-t border-white/[0.06] py-8 px-4 sm:px-6">
-      <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div className="flex items-center gap-3">
-          <Image
-            src="/images/JAMS-04-weiss.svg"
-            alt="JAMS Studio"
-            width={100}
-            height={30}
-          />
-          <div className="w-px h-5 bg-white/[0.06]" />
-          <span className="text-sm text-[var(--color-text-muted)]">
-            © {year ?? "2025"} JAMS Studio GmbH
-          </span>
+    <footer className="relative z-[1] border-t border-white/6 pt-10 pb-8 px-4 sm:px-6">
+      <div className="max-w-[1200px] mx-auto">
+        {/* Top row */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-8">
+          <Link href="#hero">
+            <Image
+              src="/images/JAMS-04-weiss.svg"
+              alt="JAMS Studio"
+              width={100}
+              height={30}
+              style={{ height: "auto" }}
+            />
+          </Link>
+
+          <nav className="flex flex-wrap gap-6">
+            {[
+              { name: "Services", href: "#services" },
+              { name: "Process", href: "#process" },
+              { name: "Stack", href: "#tech" },
+              { name: "Contact", href: "#contact" },
+            ].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-text-secondary hover:text-amber transition-colors"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
         </div>
 
-        <div className="flex gap-6">
-          {[
-            { name: "Services", href: "#services" },
-            { name: "Process", href: "#process" },
-            { name: "Contact", href: "#contact" },
-          ].map((link) => (
+        {/* Bottom row */}
+        <div className="border-t border-white/6 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <span className="text-sm text-text-muted">
+            © {year ?? "2025"} JAMS Studio — Paderborn, Germany
+          </span>
+          <div className="flex gap-5">
             <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-amber)] transition-colors"
+              href="mailto:info@jams-studio.de"
+              className="text-sm text-text-muted hover:text-amber transition-colors"
             >
-              {link.name}
+              info@jams-studio.de
             </Link>
-          ))}
+            <span className="text-border">|</span>
+            <Link
+              href="/impressum"
+              className="text-sm text-text-muted hover:text-amber transition-colors"
+            >
+              Impressum
+            </Link>
+            <span className="text-border">|</span>
+            <Link
+              href="/datenschutz"
+              className="text-sm text-text-muted hover:text-amber transition-colors"
+            >
+              Datenschutz
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
